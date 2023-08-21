@@ -1,0 +1,61 @@
+/* https://www.figma.com/file/Gw0ZNBbYN8asqFlZWy3jG1/Country-Quiz?type=design&node-id=0-1&mode=design&t=qh49jtcy308p3flT-0 */
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&display=swap');
+
+/* 
+  font-family: 'Raleway', sans-serif;
+*/
+
+:root {
+  --titleBlackStrong: #333333;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: var(--titleBlackStrong);
+}
+
+html {
+  box-sizing: border-box;
+  font-family: 'Raleway', sans-serif;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button { 
+  cursor: pointer;
+  border: none;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+p {
+  margin: 0;
+}
+
+#app { 
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 30vw 70vw;
+  grid-template-rows: 100vh;
+  color: white;
+}
+
