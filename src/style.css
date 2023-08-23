@@ -59,3 +59,11 @@ p {
   color: white;
 }
 
+@media (max-width: 375px) {
+  #app { 
+    height: auto;
+    width: 100vw;
+    grid-template-columns: 100vw;
+    grid-auto-rows: auto;
+  }
+}
