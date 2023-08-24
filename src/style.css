@@ -59,6 +59,12 @@ p {
   color: white;
 }
 
+.circle-btn {
+  /* width: 2rem; */
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+}
+
 @media (max-width: 375px) {
   #app { 
     height: auto;
