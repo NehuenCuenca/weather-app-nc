@@ -2,11 +2,11 @@
     <div class="semi-drawer">
         <div class="search-buttons">
             <button class="search-places" @click="openSemiDrawer">Search places</button>
-            <button class="activate-location circle-btn">🧭</button>
+            <button class="activate-location circle-btn" @click="getWeatherFromCurrentPosition">🧭</button>
         </div>
 
-        <form class="search-for-places" v-show="isSearchingPlaces" @submit.prevent="submitForm">
-            <button class="close-btn" @click="() => isSearchingPlaces = false" tabindex="-1">X</button>
+        <form class="search-for-places" v-if="isSearchingPlaces" @submit.prevent="submitForm">
+            <button type="button" class="close-btn" @click="() => isSearchingPlaces = false" tabindex="-1">X</button>
 
             <div class="write-block">
                 <input type="text" tabindex="0" placeholder="🔍 search location" v-model="searchLocation" >
@@ -15,20 +15,20 @@
 
             <ul class="default-places-list">
                 <li class="default-place-item">
-                    <button>London</button>
+                    <button @click.prevent="selectDefaultAdress">London</button>
                 </li>
                 <li class="default-place-item">
-                    <button>Barcelona</button>
+                    <button @click.prevent="selectDefaultAdress">Barcelona</button>
                 </li>
                 <li class="default-place-item">
-                    <button>Long Beach</button>
+                    <button @click.prevent="selectDefaultAdress">Long Beach</button>
                 </li>
             </ul>
         </form>
 
         <div class="parent">
             <img src="../assets/Cloud-background.png" alt="cloud" class="bg-img">
-            <img src="../assets/LightCloud.png" alt="principal" class="principal-img">
+            <img :src="`src/assets/${iconName}.png`"  alt="principal" class="principal-img">
         </div>
 
         <div class="big-grade-today">
@@ -65,7 +65,9 @@ export default {
         const shortDescription = computed(() => store.state.todayWeather.currentConditions.conditions)
         const date = computed(() => store.state.todayWeather.days[0].datetime)
         const address = computed(() => store.state.todayWeather.address)
-
+        const iconName = computed(() => store.state.todayWeather.currentConditions.icon)
+        
+    
 
         // COMPOSABLE
         const { getWeatherFromCurrentPosition, getWeatherOfLocation } = useWeatherLocation()
@@ -80,8 +82,15 @@ export default {
 
         const submitForm = () => {
             getWeatherOfLocation(searchLocation.value)
-            console.log(store.state.todayWeather);
+            isSearchingPlaces.value = false
+            searchLocation.value = ''
         }
+
+        const selectDefaultAdress = (e) => { 
+            const defaultAdress = e.target.textContent
+            getWeatherOfLocation(defaultAdress)
+            isSearchingPlaces.value = false
+         } 
 
         return {
             isSearchingPlaces,
@@ -93,6 +102,9 @@ export default {
             shortDescription,
             date,
             address,
+            iconName,
+            selectDefaultAdress,
+            getWeatherFromCurrentPosition
         }
     }
 }
@@ -217,10 +229,10 @@ li.default-place-item {
 }
 
 .parent .principal-img {
-    width: 50%;
+    width: 30%;
     position: absolute;
-    top: 10%;
-    left: 25%;
+    top: 25%;
+    left: 35%;
 }
 
 
