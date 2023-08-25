@@ -5,12 +5,12 @@
             <button class="activate-location circle-btn">🧭</button>
         </div>
 
-        <form class="search-for-places" v-if="isSearchingPlaces" @submit.prevent="submitForm">
-            <button class="close-btn" @click="() => isSearchingPlaces = false">X</button>
+        <form class="search-for-places" v-show="isSearchingPlaces" @submit.prevent="submitForm">
+            <button class="close-btn" @click="() => isSearchingPlaces = false" tabindex="-1">X</button>
 
             <div class="write-block">
-                <input type="text" placeholder="🔍 search location" v-model="searchLocation">
-                <button>Search</button>
+                <input type="text" tabindex="0" placeholder="🔍 search location" v-model="searchLocation" >
+                <button type="submit">Search</button>
             </div>
 
             <ul class="default-places-list">
@@ -32,51 +32,67 @@
         </div>
 
         <div class="big-grade-today">
-            <span class="number">15</span>
+            <span class="number">{{ temperature }}</span>
             <span class="measure">°C</span>
         </div>
 
-        <span class="word-description">Shower</span>
+        <span class="word-description">{{ shortDescription }}</span>
 
         <div class="tiny-details">
             <span class="today">Today</span>
-            <span class="date">Fri, 5 Jun</span>
-            <span class="location">📍 Helsinki</span>
+            <span class="date">{{ date }}</span>
+            <span class="location">📍 {{ address }}</span>
         </div>
     </div>
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 
 import { useWeatherLocation } from '../composables/useWeatherLocation'
+import store from '../store'
 
 export default {
     name: "SemiDrawer",
     setup() {
+        // STATE
         const isSearchingPlaces = ref(false)
         const searchLocation = ref('')
 
-        const { getWeatherFromCurrentPosition, getWeatherInfo } = useWeatherLocation()
+        // COMPUTED
+        const todayWeather = computed(() => store.state.todayWeather)
+        const temperature = computed(() => Math.floor(store.state.todayWeather.currentConditions.temp))
+        const shortDescription = computed(() => store.state.todayWeather.currentConditions.conditions)
+        const date = computed(() => store.state.todayWeather.days[0].datetime)
+        const address = computed(() => store.state.todayWeather.address)
 
+
+        // COMPOSABLE
+        const { getWeatherFromCurrentPosition, getWeatherOfLocation } = useWeatherLocation()
+
+        // LIFECYCLE
         onMounted(() => {
             getWeatherFromCurrentPosition()
         })
 
-        const openSemiDrawer = () => {
-            isSearchingPlaces.value = true
-        }
+        // METHODS
+        const openSemiDrawer = () => { isSearchingPlaces.value = true }
 
-        const submitForm = async() => { 
-            const info = await getWeatherInfo(searchLocation.value)
-            console.log(info);
-         }
+        const submitForm = () => {
+            getWeatherOfLocation(searchLocation.value)
+            console.log(store.state.todayWeather);
+        }
 
         return {
             isSearchingPlaces,
             openSemiDrawer,
             searchLocation,
-            submitForm
+            submitForm,
+            todayWeather,
+            temperature,
+            shortDescription,
+            date,
+            address,
         }
     }
 }
@@ -86,7 +102,7 @@ export default {
 .semi-drawer {
     position: relative;
     background-color: #1e213a;
-    padding: 2rem 0;
+    padding: 1rem 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
