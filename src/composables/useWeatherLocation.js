@@ -31,8 +31,13 @@ export function useWeatherLocation() {
     store.dispatch("getWeatherInfo", location);
   };
 
+  const convertToFahrenheit = (celsius) => {
+    return Math.floor((celsius * (9 / 5)) + 32)
+}
+
   return {
     getWeatherOfLocation,
     getWeatherFromCurrentPosition,
+    convertToFahrenheit
   };
 }

@@ -9,7 +9,7 @@
             <button type="button" class="close-btn" @click="() => isSearchingPlaces = false" tabindex="-1">X</button>
 
             <div class="write-block">
-                <input type="text" tabindex="0" placeholder="🔍 search location" v-model="searchLocation" >
+                <input type="text" tabindex="0" placeholder="🔍 search location" v-model="searchLocation">
                 <button type="submit">Search</button>
             </div>
 
@@ -28,12 +28,12 @@
 
         <div class="parent">
             <img src="../assets/Cloud-background.png" alt="cloud" class="bg-img">
-            <img :src="`src/assets/${iconName}.png`"  alt="principal" class="principal-img">
+            <img :src="`src/assets/${iconName}.png`" alt="principal" class="principal-img">
         </div>
 
         <div class="big-grade-today">
             <span class="number">{{ temperature }}</span>
-            <span class="measure">°C</span>
+            <span class="measure">°{{ currentMeasure }}</span>
         </div>
 
         <span class="word-description">{{ shortDescription }}</span>
@@ -59,18 +59,24 @@ export default {
         const isSearchingPlaces = ref(false)
         const searchLocation = ref('')
 
+        // COMPOSABLE
+        const { getWeatherFromCurrentPosition, getWeatherOfLocation, convertToFahrenheit } = useWeatherLocation()
+
+
         // COMPUTED
+        const currentMeasure = computed(() => store.state.currentMeasure)
+        const currentMeasureIsFahrenheit = computed(() => currentMeasure.value === 'F')
         const todayWeather = computed(() => store.state.todayWeather)
-        const temperature  = computed(() => Math.floor(store.state.todayWeather.currentConditions.temp))
+        const temperature = computed(() => {
+            const roundedTemp = Math.floor(store.state.todayWeather.currentConditions.temp)
+            if (!currentMeasureIsFahrenheit.value) return roundedTemp
+
+            return convertToFahrenheit(roundedTemp)
+        })
         const shortDescription = computed(() => store.state.todayWeather.currentConditions.conditions)
         const date = computed(() => store.state.todayWeather.days[0].datetime)
-        const address  = computed(() => store.state.todayWeather.address)
+        const address = computed(() => store.state.todayWeather.address)
         const iconName = computed(() => store.state.todayWeather.currentConditions.icon)
-        
-    
-
-        // COMPOSABLE
-        const { getWeatherFromCurrentPosition, getWeatherOfLocation } = useWeatherLocation()
 
         // LIFECYCLE
         onMounted(() => {
@@ -86,11 +92,11 @@ export default {
             searchLocation.value = ''
         }
 
-        const selectDefaultAdress = (e) => { 
+        const selectDefaultAdress = (e) => {
             const defaultAdress = e.target.textContent
             getWeatherOfLocation(defaultAdress)
             isSearchingPlaces.value = false
-         } 
+        }
 
         return {
             isSearchingPlaces,
@@ -104,7 +110,8 @@ export default {
             address,
             iconName,
             selectDefaultAdress,
-            getWeatherFromCurrentPosition
+            getWeatherFromCurrentPosition,
+            currentMeasure
         }
     }
 }

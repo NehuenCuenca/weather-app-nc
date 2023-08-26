@@ -63,7 +63,7 @@ export default {
             () => degToCard(store.state.todayWeather.currentConditions.winddir)
         );
         const visibility = computed(
-            () => store.state.todayWeather.currentConditions.visibility || '🌚'
+            () => store.state.todayWeather.currentConditions.visibility || '--'
         );
 
         // https://gist.github.com/felipeskroski-zz/8aec22f01dabdbf8fb6b?permalink_comment_id=3485882#gistcomment-3485882

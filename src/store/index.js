@@ -4,6 +4,7 @@ const store = createStore({
   state() {
     return {
       todayWeather: null,
+      currentMeasure: 'C'
     };
   },
 
@@ -23,6 +24,10 @@ const store = createStore({
 
     setTodayWeather(state, payload) {
       state.todayWeather = payload;
+    },
+
+    setCurrentMeasure(state, measure) {
+      state.currentMeasure = measure;
     },
   },
 
@@ -55,7 +60,6 @@ const store = createStore({
           ? state.todayWeather.days.length
           : days+1;
 
-          
       return state.todayWeather?.days.slice(1, totalOrLess);
     },
   },

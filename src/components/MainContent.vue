@@ -1,12 +1,14 @@
 <template>
     <div class="main-content">
         <div class="measure-selector">
-            <button class="circle-btn celsius active">°C</button>
-            <button class="circle-btn fahrenheit">°F</button>
+            <button class="circle-btn celsius" :class="currentMeasure === 'C' ? 'active' : ''"
+                @click="setMeasure('C')">°C</button>
+            <button class="circle-btn fahrenheit" :class="currentMeasure === 'F' ? 'active' : ''"
+                @click="setMeasure('F')">°F</button>
         </div>
 
         <NextDaysList />
-        
+
         <TodaysHightlightsGrid />
 
         <footer>created by Nehuen - devChallenges.io</footer>
@@ -14,7 +16,8 @@
 </template>
 
 <script>
-
+import { onMounted, ref, computed } from 'vue'
+import store from '../store'
 
 import NextDaysList from '../components/NextDaysList.vue'
 import TodaysHightlightsGrid from '../components/TodaysHightlightsGrid.vue'
@@ -26,8 +29,15 @@ export default {
         TodaysHightlightsGrid
     },
     setup() {
+        const currentMeasure = computed(() => store.state.currentMeasure)
+
+        const setMeasure = (measure) => { 
+            store.commit('setCurrentMeasure', measure)
+        }
 
         return {
+            currentMeasure,
+            setMeasure
         }
     }
 }
