@@ -61,10 +61,10 @@ export default {
 
         // COMPUTED
         const todayWeather = computed(() => store.state.todayWeather)
-        const temperature = computed(() => Math.floor(store.state.todayWeather.currentConditions.temp))
+        const temperature  = computed(() => Math.floor(store.state.todayWeather.currentConditions.temp))
         const shortDescription = computed(() => store.state.todayWeather.currentConditions.conditions)
         const date = computed(() => store.state.todayWeather.days[0].datetime)
-        const address = computed(() => store.state.todayWeather.address)
+        const address  = computed(() => store.state.todayWeather.address)
         const iconName = computed(() => store.state.todayWeather.currentConditions.icon)
         
     
