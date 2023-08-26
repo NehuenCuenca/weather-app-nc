@@ -208,4 +208,117 @@ export default {
 .air-pressure-status {
     grid-area: air-pressure;
 }
+
+@media (max-width: 375px) {
+    .todays-hightlights {
+    width: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, auto);
+    grid-template-areas:
+        "title"
+        "wind"
+        "humidity"
+        "visibility"
+        "air-pressure";
+    gap: 3vh 4vw;
+}
+
+.todays-hightlights .first-row-wrapper>.hightlight {
+    height: 32vh;
+}
+
+.humidity-status .progress-bar-parent {
+    margin-top: 10px;
+}
+
+/* .todays-hightlights .title {
+    grid-area: title;
+    font: 700 1.5rem "Raleway", sans-serif;
+}
+
+.todays-hightlights .first-row-wrapper {
+    display: contents;
+}
+
+.todays-hightlights .first-row-wrapper>.hightlight {
+    height: 29vh;
+}
+
+.todays-hightlights .hightlight {
+    background-color: #1e213a;
+    color: #e7e7eb;
+    height: 22vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3vh 0;
+}
+
+.hightlight .title {
+    font: 500 1rem "Raleway", sans-serif;
+} */
+
+/* .hightlight .big-number {} */
+/* .big-number .number {
+    font: 700 4rem "Raleway", sans-serif;
+}
+
+.big-number .not-number {
+    font: 500 2.25rem "Raleway", sans-serif;
+}
+
+.wind-status {
+    grid-area: wind;
+}
+
+.wind-status .wind-direction {
+    font: 500 14px "Raleway", sans-serif;
+}
+
+.humidity-status {
+    grid-area: humidity;
+}
+
+.humidity-status .progress-bar-parent {
+    width: 80%;
+    height: 1.5vh;
+    position: relative;
+    background-color: #e7e7eb;
+    border-radius: 80px;
+    font: 700 12px "Raleway", sans-serif;
+}
+
+.progress-bar-parent .bg-bar-child {
+    height: 100%;
+    width: v-bind(humidityPercent + '%');
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #ffec65;
+    border-radius: 80px;
+}
+
+.percentages {
+    width: 100%;
+    position: absolute;
+    bottom: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.percentage-icon {
+    position: absolute;
+    top: 100%;
+    right: 0;
+}
+
+.visibility-status {
+    grid-area: visibility;
+}
+
+.air-pressure-status {
+    grid-area: air-pressure;
+} */
+}
 </style>

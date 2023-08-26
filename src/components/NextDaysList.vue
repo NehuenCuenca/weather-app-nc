@@ -32,6 +32,14 @@ ul.next-days-list {
     display: flex;
     justify-content: space-between;
     place-self: start center;
-    gap: 0 1vw;
+    gap: 3vh 1vw;
+}
+
+@media (max-width: 375px) {
+    ul.next-days-list {
+        height: auto;
+        width: 100%;
+        gap: 5vh 1vw;
+    }
 }
 </style>

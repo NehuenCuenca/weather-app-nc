@@ -13,7 +13,7 @@
 import { computed, ref } from 'vue'
 import store from '../store'
 
-import {useWeatherLocation} from '../composables/useWeatherLocation'
+import { useWeatherLocation } from '../composables/useWeatherLocation'
 
 export default {
     name: 'NextDayItem',
@@ -25,19 +25,29 @@ export default {
 
         // COMPUTEDS
         const currentMeasure = computed(() => store.state.currentMeasure)
+        
         const currentMeasureIsFahrenheit = computed(() => store.state.currentMeasure === 'F')
-        const date = computed(() => props.weather.datetime)
+        
+        const date = computed(() => {
+            const day = new Date(props.weather.datetime).getDate()
+            const now = new Date().getDate()
+
+            return (day === now) ? 'Tomorrow' : props.weather.datetime
+        })
+
         const iconName = computed(() => props.weather.icon)
+
         const tempMin = computed(() => {
             const roundedTemp = Math.floor(props.weather.tempmin)
             if (!currentMeasureIsFahrenheit.value) return roundedTemp
-            
+
             return convertToFahrenheit(roundedTemp)
         })
+
         const tempMax = computed(() => {
             const roundedTemp = Math.floor(props.weather.tempmax)
             if (!currentMeasureIsFahrenheit.value) return roundedTemp
-            
+
             return convertToFahrenheit(roundedTemp)
         })
 

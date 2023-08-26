@@ -31,7 +31,7 @@ export default {
     setup() {
         const currentMeasure = computed(() => store.state.currentMeasure)
 
-        const setMeasure = (measure) => { 
+        const setMeasure = (measure) => {
             store.commit('setCurrentMeasure', measure)
         }
 
@@ -56,7 +56,7 @@ export default {
         "todays-hightlights"
         "footer"
     ;
-    gap: 2vh 0;
+    gap: 3vh 0;
 }
 
 .measure-selector {
@@ -79,13 +79,16 @@ export default {
     background-color: #E7E7EB;
 }
 
-
-
-
 footer {
     grid-area: footer;
     color: #A09FB1;
     font: 500 14px 'Raleway', sans-serif;
     place-self: end center;
+}
+
+@media (max-width: 375px) {
+    .main-content {
+        gap: 10vh 0;
+    }
 }
 </style>
