@@ -1,7 +1,7 @@
 <template>
     <li class="next-day-item">
         <span class="date">{{ date }}</span>
-        <img :src="`src/assets/${iconName}.png`" :alt="`${iconName}`" class="climate">
+        <img :src="`/src/assets/${iconName}.png`" :alt="`${iconName}`" class="climate">
         <div class="max-min">
             <span class="max">{{ tempMax }}°{{ currentMeasure }}</span>
             <span class="min">{{ tempMin }}°{{ currentMeasure }}</span>

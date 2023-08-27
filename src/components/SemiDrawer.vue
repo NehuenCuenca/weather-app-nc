@@ -28,7 +28,7 @@
 
         <div class="parent">
             <img src="../assets/Cloud-background.png" alt="cloud" class="bg-img">
-            <img :src="`src/assets/${iconName}.png`" alt="principal" class="principal-img">
+            <img :src="`/src/assets/${iconName}.png`" alt="principal" class="principal-img">
         </div>
 
         <div class="big-grade-today">
