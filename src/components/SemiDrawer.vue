@@ -28,7 +28,7 @@
 
         <div class="parent">
             <img src="../assets/Cloud-background.png" alt="cloud" class="bg-img">
-            <img :src="`/src/assets/${iconName}.png`" alt="principal" class="principal-img">
+            <img :src="relativePathOfIcon" alt="principal" class="principal-img">
         </div>
 
         <div class="big-grade-today">
@@ -76,7 +76,14 @@ export default {
         const shortDescription = computed(() => store.state.todayWeather.currentConditions.conditions)
         const date = computed(() => store.state.todayWeather.days[0].datetime)
         const address = computed(() => store.state.todayWeather.address)
-        const iconName = computed(() => store.state.todayWeather.currentConditions.icon)
+        // const iconName = computed(() => store.state.todayWeather.currentConditions.icon)
+        const relativePathOfIcon = computed(() => {
+            const iconName = store.state.todayWeather.currentConditions.icon
+            const pathUrlIcon = new URL(`../assets/${iconName}.png`, import.meta.url).href
+
+            return pathUrlIcon
+        })
+
 
         // LIFECYCLE
         onMounted(() => {
@@ -108,7 +115,7 @@ export default {
             shortDescription,
             date,
             address,
-            iconName,
+            relativePathOfIcon,
             selectDefaultAdress,
             getWeatherFromCurrentPosition,
             currentMeasure

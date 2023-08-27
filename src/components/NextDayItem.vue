@@ -1,7 +1,7 @@
 <template>
     <li class="next-day-item">
         <span class="date">{{ date }}</span>
-        <img :src="`/src/assets/${iconName}.png`" :alt="`${iconName}`" class="climate">
+        <img :src="relativePathOfIcon" :alt="`${weather.icon}`" class="climate">
         <div class="max-min">
             <span class="max">{{ tempMax }}°{{ currentMeasure }}</span>
             <span class="min">{{ tempMin }}°{{ currentMeasure }}</span>
@@ -35,7 +35,13 @@ export default {
             return (day === now) ? 'Tomorrow' : props.weather.datetime
         })
 
-        const iconName = computed(() => props.weather.icon)
+        // const iconName = computed(() => props.weather.icon)
+        const relativePathOfIcon = computed(() => {
+            const iconName = props.weather.icon
+            const pathUrlIcon = new URL(`../assets/${iconName}.png`, import.meta.url).href
+
+            return pathUrlIcon
+        })
 
         const tempMin = computed(() => {
             const roundedTemp = Math.floor(props.weather.tempmin)
@@ -54,7 +60,7 @@ export default {
         return {
             currentMeasure,
             date,
-            iconName,
+            relativePathOfIcon,
             tempMin,
             tempMax,
         }
