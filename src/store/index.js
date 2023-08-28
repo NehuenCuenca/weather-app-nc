@@ -47,7 +47,7 @@ const store = createStore({
           throw new Error(await resp.text());
         }
       } catch (error) {
-        alert(error.message);
+        alert(error.message, '\n If you are on mobile, activate the GPS to get the location, and refresh the page');
         commit("setTodayWeather", null);
       }
     },
