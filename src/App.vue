@@ -1,34 +1,21 @@
 <template>
-    <h1 v-if="haveWeatherInfo" style="color: black">Loading 🔄</h1>
-    <template v-else>
-      <SemiDrawer />
-      
-      <MainContent />
-    </template>
+  <SemiDrawer />
+  <MainContent />
 </template>
 
 <script>
 import SemiDrawer from './components/SemiDrawer.vue'
 import MainContent from './components/MainContent.vue'
-import { useWeatherLocation } from './composables/useWeatherLocation'
 import store from './store'
-import { onBeforeMount, computed, ref } from 'vue';
+import { computed } from 'vue';
 
 export default {
   components: { SemiDrawer, MainContent },
   setup() {
 
-    // COMPOSABLE
-    const { getWeatherFromCurrentPosition } = useWeatherLocation()
-
-    // LIFECYCLE
-    onBeforeMount(() => {
-      getWeatherFromCurrentPosition()
-    })
-
     // COMPUTEDS
     const onNextDays = computed(() => store.getters.weatherOnNextDays(5))
-    const haveWeatherInfo = computed(() => !store.state.todayWeather)
+    const haveWeatherInfo = computed(() => store.getters.haveWeatherInfo)
 
     return {
       onNextDays,

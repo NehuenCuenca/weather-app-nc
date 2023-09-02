@@ -1,46 +1,52 @@
 <template>
     <div class="todays-hightlights">
         <span class="title">Today’s Hightlights </span>
-        <div class="first-row-wrapper">
-            <div class="hightlight wind-status">
-                <span class="title">Wind status</span>
-                <div class="big-number">
-                    <span class="number">{{ windSpeed }}</span>
-                    <span class="not-number"> mph</span>
-                </div>
-                <span class="wind-direction">From: {{ windDirection }}</span>
-            </div>
-            <div class="hightlight humidity-status">
-                <span class="title">Humidity</span>
-                <div class="big-number">
-                    <span class="number">{{humidityPercent }}</span>
-                    <span class="not-number">%</span>
-                </div>
-                <div class="progress-bar-parent">
-                    <div class="bg-bar-child"></div>
-                    <div class="percentages">
-                        <span class="zero">0</span>
-                        <span class="fifty">50</span>
-                        <span class="hundred">100</span>
+        <template v-if="haveWeatherInfo">
+            <div class="first-row-wrapper">
+                <div class="hightlight wind-status">
+                    <span class="title">Wind status</span>
+                    <div class="big-number">
+                        <span class="number">{{ windSpeed }}</span>
+                        <span class="not-number"> mph</span>
                     </div>
-                    <span class="percentage-icon">%</span>
+                    <span class="wind-direction">From: {{ windDirection }}</span>
+                </div>
+                <div class="hightlight humidity-status">
+                    <span class="title">Humidity</span>
+                    <div class="big-number">
+                        <span class="number">{{ humidityPercent }}</span>
+                        <span class="not-number">%</span>
+                    </div>
+                    <div class="progress-bar-parent">
+                        <div class="bg-bar-child"></div>
+                        <div class="percentages">
+                            <span class="zero">0</span>
+                            <span class="fifty">50</span>
+                            <span class="hundred">100</span>
+                        </div>
+                        <span class="percentage-icon">%</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="hightlight visibility-status">
-            <span class="title">Visibility</span>
-            <div class="big-number">
-                <span class="number">{{ visibility }}</span>
-                <span class="not-number"> miles</span>
+            <div class="hightlight visibility-status">
+                <span class="title">Visibility</span>
+                <div class="big-number">
+                    <span class="number">{{ visibility }}</span>
+                    <span class="not-number"> miles</span>
+                </div>
             </div>
-        </div>
-        <div class="hightlight air-pressure-status">
-            <span class="title">Air Pressure</span>
-            <div class="big-number">
-                <span class="number">{{ airPressure }}</span>
-                <span class="not-number"> mb</span>
+            <div class="hightlight air-pressure-status">
+                <span class="title">Air Pressure</span>
+                <div class="big-number">
+                    <span class="number">{{ airPressure }}</span>
+                    <span class="not-number"> mb</span>
+                </div>
             </div>
-        </div>
+        </template>
+
+        <template v-if="!haveWeatherInfo">
+            <p>❌ There are no hightlights...</p>
+        </template>
     </div>
 </template>
 
@@ -50,20 +56,22 @@ import store from "../store";
 
 export default {
     setup() {
+        const todayWeather = computed(() => store.state.todayWeather)
+        const haveWeatherInfo = computed(() => store.getters.haveWeatherInfo)
         const humidityPercent = computed(
-            () => Math.floor(store.state.todayWeather.currentConditions.humidity)
+            () => Math.floor(todayWeather.value?.currentConditions.humidity) || '--'
         );
         const airPressure = computed(
-            () => store.state.todayWeather.currentConditions.pressure
+            () => todayWeather.value.currentConditions.pressure || '--'
         );
         const windSpeed = computed(
-            () => store.state.todayWeather.currentConditions.windspeed
+            () => todayWeather.value.currentConditions.windspeed || '--'
         );
         const windDirection = computed(
-            () => degToCard(store.state.todayWeather.currentConditions.winddir)
+            () => degToCard(todayWeather.value.currentConditions.winddir)
         );
         const visibility = computed(
-            () => store.state.todayWeather.currentConditions.visibility || '--'
+            () => todayWeather.value.currentConditions.visibility || '--'
         );
 
         // https://gist.github.com/felipeskroski-zz/8aec22f01dabdbf8fb6b?permalink_comment_id=3485882#gistcomment-3485882
@@ -94,6 +102,7 @@ export default {
         }
 
         return {
+            haveWeatherInfo,
             humidityPercent,
             airPressure,
             windSpeed,
@@ -211,27 +220,27 @@ export default {
 
 @media (max-width: 375px) {
     .todays-hightlights {
-    width: 100%;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(4, auto);
-    grid-template-areas:
-        "title"
-        "wind"
-        "humidity"
-        "visibility"
-        "air-pressure";
-    gap: 3vh 4vw;
-}
+        width: 100%;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, auto);
+        grid-template-areas:
+            "title"
+            "wind"
+            "humidity"
+            "visibility"
+            "air-pressure";
+        gap: 3vh 4vw;
+    }
 
-.todays-hightlights .first-row-wrapper>.hightlight {
-    height: 32vh;
-}
+    .todays-hightlights .first-row-wrapper>.hightlight {
+        height: 32vh;
+    }
 
-.humidity-status .progress-bar-parent {
-    margin-top: 10px;
-}
+    .humidity-status .progress-bar-parent {
+        margin-top: 10px;
+    }
 
-/* .todays-hightlights .title {
+    /* .todays-hightlights .title {
     grid-area: title;
     font: 700 1.5rem "Raleway", sans-serif;
 }
@@ -259,8 +268,8 @@ export default {
     font: 500 1rem "Raleway", sans-serif;
 } */
 
-/* .hightlight .big-number {} */
-/* .big-number .number {
+    /* .hightlight .big-number {} */
+    /* .big-number .number {
     font: 700 4rem "Raleway", sans-serif;
 }
 

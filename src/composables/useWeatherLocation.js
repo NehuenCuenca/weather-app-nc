@@ -2,10 +2,11 @@ import { ref, onMounted } from "vue";
 import store from "../store";
 
 export function useWeatherLocation() {
-  const alertNoPermissOfCurrentLocation = () =>
+  const alertNoPermissOfCurrentLocation = () => {
     alert(
-      "Unable to retrieve your location :(, try looking for it with the 'Seach for places' button"
-    );
+      "Unable to retrieve your location :(, try looking for it with the 'Seach for places' button. Or reset permission for location and refresh the page."
+      );
+  }
 
   const getWeatherFromCurrentPosition = () => {
     const succes = ({ coords }) => {

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { onMounted, ref, computed } from 'vue'
+import { computed } from 'vue'
 import store from '../store'
 
 import NextDaysList from '../components/NextDaysList.vue'

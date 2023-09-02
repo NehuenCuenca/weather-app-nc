@@ -1,11 +1,14 @@
 <template>
     <ul class="next-days-list">
-        <NextDayItem v-for="(nextDay, indexNextDay) in nextDays" :key="indexNextDay" :weather="nextDay" />
+        <template v-if="haveWeatherInfo">
+            <NextDayItem  v-for="(nextDay, indexNextDay) in nextDays" :key="indexNextDay" :weather="nextDay" />
+        </template>
+        <li v-else class="no-info" v-for="(_, indexElem) in 5" :key="indexElem">No location given 🗿</li>
     </ul>
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import store from '../store';
 import NextDayItem from '../components/NextDayItem.vue'
 
@@ -16,9 +19,11 @@ export default {
     },
     setup() {
         const nextDays = computed(() => store.getters.weatherOnNextDays(5))
+        const haveWeatherInfo = computed(() => store.getters.haveWeatherInfo)
 
         return {
-            nextDays
+            nextDays,
+            haveWeatherInfo
         }
     }
 }
@@ -33,6 +38,10 @@ ul.next-days-list {
     justify-content: space-between;
     place-self: start center;
     gap: 3vh 1vw;
+}
+
+li.no-info {
+    text-align: center;
 }
 
 @media (max-width: 375px) {

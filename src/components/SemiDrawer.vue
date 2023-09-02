@@ -26,23 +26,44 @@
             </ul>
         </form>
 
-        <div class="parent">
-            <img src="../assets/Cloud-background.png" alt="cloud" class="bg-img">
-            <img :src="relativePathOfIcon" alt="principal" class="principal-img">
-        </div>
+        <template v-if="haveWeatherInfo">
+            <div class="parent">
+                <img src="../assets/Cloud-background.png" alt="cloud" class="bg-img">
+                <img :src="relativePathOfIcon" alt="principal" class="principal-img">
+            </div>
 
-        <div class="big-grade-today">
-            <span class="number">{{ temperature }}</span>
-            <span class="measure">°{{ currentMeasure }}</span>
-        </div>
+            <div class="big-grade-today">
+                <span class="number">{{ temperature }}</span>
+                <span class="measure">°{{ currentMeasure }}</span>
+            </div>
 
-        <span class="word-description">{{ shortDescription }}</span>
+            <span class="word-description">{{ shortDescription }}</span>
 
-        <div class="tiny-details">
-            <span class="today">Today</span>
-            <span class="date">{{ date }}</span>
-            <span class="location">📍 {{ address }}</span>
-        </div>
+            <div class="tiny-details">
+                <span class="today">Today</span>
+                <span class="date">{{ date }}</span>
+                <span class="location">📍 {{ address }}</span>
+            </div>
+        </template>
+        <template v-else>
+            <div class="parent">
+                <img src="../assets/Cloud-background.png" alt="cloud" class="bg-img">
+                <img :src="relativePathOfIcon" alt="no image 🔨" class="principal-img" v-if="!haveWeatherInfo">
+            </div>
+
+            <div class="big-grade-today">
+                <span class="number">--</span>
+                <span class="measure">°{{ currentMeasure }}</span>
+            </div>
+
+            <span class="word-description">No description</span>
+
+            <div class="tiny-details">
+                <span class="today">Today</span>
+                <span class="date">{{ date }}</span>
+                <span class="location">📍 No location given</span>
+            </div>
+        </template>
     </div>
 </template>
 
@@ -64,26 +85,46 @@ export default {
 
 
         // COMPUTED
-        const currentMeasure = computed(() => store.state.currentMeasure)
+        const haveWeatherInfo = computed(() => store.getters.haveWeatherInfo)
+        const currentMeasure  = computed(() => store.state.currentMeasure)
         const currentMeasureIsFahrenheit = computed(() => currentMeasure.value === 'F')
         const todayWeather = computed(() => store.state.todayWeather)
+
         const temperature = computed(() => {
-            const roundedTemp = Math.floor(store.state.todayWeather.currentConditions.temp)
+            if (!haveWeatherInfo.value) return '--'
+            const roundedTemp = Math.floor(todayWeather.value.currentConditions.temp)
             if (!currentMeasureIsFahrenheit.value) return roundedTemp
 
             return convertToFahrenheit(roundedTemp)
         })
-        const shortDescription = computed(() => store.state.todayWeather.currentConditions.conditions)
-        const date = computed(() => store.state.todayWeather.days[0].datetime)
-        const address = computed(() => store.state.todayWeather.address)
-        // const iconName = computed(() => store.state.todayWeather.currentConditions.icon)
+        const shortDescription = computed(() => {
+            if (!haveWeatherInfo.value) return 'No description 🤷‍♂️'
+            return todayWeather.value.currentConditions.conditions
+        })
+        const date = computed(() => {
+            // Fri, 5 Jun
+            const locale = 'en-US'
+            const today  = new Date
+            const dayName = today.toLocaleDateString(locale, {weekday: 'short'});
+            const monthName = today.toLocaleString(locale, {month: 'short'});
+            const dayNumber = today.getDate()
+
+            const formatedDate = `${dayName}, ${dayNumber} ${monthName}`
+            if (!haveWeatherInfo.value) return formatedDate
+            return todayWeather.value?.days[0].datetime
+        })
+        const address = computed(() => {
+            if (!haveWeatherInfo.value) return 'No location given'
+            return todayWeather.value.address
+        })
+        
         const relativePathOfIcon = computed(() => {
-            const iconName = store.state.todayWeather.currentConditions.icon
+            if (!haveWeatherInfo.value) return 'placeholder-icon'
+            const iconName = todayWeather.value.currentConditions.icon
             const pathUrlIcon = new URL(`../assets/${iconName}.png`, import.meta.url).href
 
             return pathUrlIcon
         })
-
 
         // LIFECYCLE
         onMounted(() => {
@@ -106,6 +147,7 @@ export default {
         }
 
         return {
+            haveWeatherInfo,
             isSearchingPlaces,
             openSemiDrawer,
             searchLocation,

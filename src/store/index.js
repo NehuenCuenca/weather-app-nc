@@ -11,7 +11,7 @@ const store = createStore({
   mutations: {
     alertNoPermissOfCurrentLocation() {
       alert(
-        "Unable to retrieve your location :(, try looking for it with the 'Seach for places' button"
+        "Unable to retrieve your location :(, try looking for it with the 'Seach for places' button. Or reset permission for location and refresh the page."
       );
     },
 
@@ -62,6 +62,8 @@ const store = createStore({
 
       return state.todayWeather?.days.slice(1, totalOrLess);
     },
+
+    haveWeatherInfo: (state) => Boolean(state.todayWeather)
   },
 });
 
